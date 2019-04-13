@@ -60,14 +60,15 @@ class WPRTSP_ActiveCampaign{
         //$apiurl = trailingslashit( $apiurl ) . 'api/3/';
         $ac = new ActiveCampaign($apiurl, $apikey);
         if (!(int)$ac->credentials_test()) {
-            wp_send_json_error('Invalid Credentials');
+            wp_send_json_error( 'Invalid Credentials' );
         }
         else{
-            $account = $ac->api('account/view');
-            $lists = $ac->api('list/list?ids=all');
-            $contacts = $ac->api('contact/list?listid=1&limit=100');
-            wp_send_json_success($contacts);
-            wp_send_json_success($account);
+            $account = $ac->api( 'account/view' );
+            $lists = $ac->api( 'list/list?ids=all' );
+            $ac->version(2);
+            $contacts = $ac->api( 'contact/list?listid=1&limit=100' );
+            wp_send_json_success( json_decode($contacts, true) );
+            wp_send_json_success( $account );
         }
     }
 
@@ -138,8 +139,10 @@ class WPRTSP_ActiveCampaign{
                         method: 'POST',
                         data:  activecampaign_connect,
                         complete: function(jqXHR, textStatus){
-                            console.dir(jqXHR);
-                            console.dir(textStatus);
+                            //console.dir(jqXHR);
+                            resp = jqXHR.responseJSON;
+                            console.dir(resp.data);
+                            //console.dir(textStatus);
                         }
                     });
                 });
