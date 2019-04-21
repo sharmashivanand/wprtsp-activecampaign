@@ -58,6 +58,8 @@ class WPRTSP_ActiveCampaign{
             wp_send_json_error('Missing Credentials');
         }
         //$apiurl = trailingslashit( $apiurl ) . 'api/3/';
+        $apiurl = 'https://kardaruchikagwl.api-us1.com';
+        $apikey = '8b148c8e3e018445a8253410279b4c0528313e4f4283b9ef27081b1d317044b1dd788640';
         $ac = new ActiveCampaign($apiurl, $apikey);
         if (!(int)$ac->credentials_test()) {
             wp_send_json_error( 'Invalid Credentials' );
@@ -66,7 +68,7 @@ class WPRTSP_ActiveCampaign{
             $account = $ac->api( 'account/view' );
             $lists = $ac->api( 'list/list?ids=all' );
             $ac->version(2);
-            $contacts = $ac->api( 'contact/list?listid=1&limit=100' );
+            $contacts = $ac->api( 'contact/list?listid=1&limit=100&full=1' );
             wp_send_json_success( json_decode($contacts, true) );
             wp_send_json_success( $account );
         }
